@@ -14,18 +14,23 @@ import { isValidEmail, isValidPassword } from '../../utils/validators';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 
+import { login } from '../../services/authentication';
+import { useAuth } from '../../navigation/AuthProvider';
+
 function Login({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('rona@gmail.com');
+  const [password, setPassword] = useState('123456');
   const [errorMsg, setErrorMsg] = useState();
   const [isEmailInvalid, setIsEmailInvalid] = useState();
   const [isPasswordInvalid, setIsPasswordInvalid] = useState();
+
+  const { setUser } = useAuth();
 
   function handleRegisterPressed() {
     navigation.push('Register');
   }
 
-  function handleLoginPressed() {
+  async function handleLoginPressed() {
     if (!isValidEmail(email)) {
       setErrorMsg('Invalid email');
       setIsEmailInvalid(true);
@@ -33,10 +38,14 @@ function Login({ navigation }) {
       setErrorMsg('Invalid password');
       setIsPasswordInvalid(true);
     } else {
-      //TODO: implement login
       setErrorMsg('');
       setIsEmailInvalid(false);
       setIsPasswordInvalid(false);
+
+      const userInfo = await login({ email, password });
+      if (userInfo.isUserValid) {
+        setUser(userInfo);
+      }
     }
   }
 

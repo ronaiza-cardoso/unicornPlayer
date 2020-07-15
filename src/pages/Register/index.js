@@ -17,6 +17,7 @@ import {
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { register } from '../../services/authentication';
 
 function Register({ navigation }) {
   const [userData, setUserData] = useState({
@@ -46,7 +47,9 @@ function Register({ navigation }) {
     return error;
   }
 
-  function handleRegisterPressed() {}
+  function handleRegisterPressed() {
+    register({ email: userData.email, userInfo: userData });
+  }
 
   function handleBackPressed() {
     navigation.push('Login');
