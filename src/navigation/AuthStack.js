@@ -7,7 +7,11 @@ import Register from '../pages/Register';
 const Stack = createStackNavigator();
 export default function AuthStack() {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName="Register">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>

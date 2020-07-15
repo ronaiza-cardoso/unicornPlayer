@@ -7,17 +7,20 @@ const Input = ({
   isInputValid,
   onChangeText,
   value,
+  placeholder,
   autoCapitalize,
   autoCorrect,
+  secureTextEntry,
 }) => {
   return (
     <TextInput
       style={[styles.input, isInputValid && styles.error]}
-      placeholder="password"
       textContentType="password"
       onChangeText={onChangeText}
       value={value}
-      {...{ autoCapitalize, autoCorrect }}
+      placeholder={placeholder}
+      autoCapitalize={autoCapitalize}
+      {...{ autoCorrect, secureTextEntry }}
     />
   );
 };
@@ -42,11 +45,13 @@ const styles = StyleSheet.create({
 });
 
 Input.propTypes = {
-  isInputValid: PropTypes.func,
+  isInputValid: PropTypes.bool,
   onChangeText: PropTypes.func,
   value: PropTypes.string,
-  autoCapitalize: PropTypes.bool,
+  placeholder: PropTypes.string,
+  autoCapitalize: PropTypes.string,
   autoCorrect: PropTypes.bool,
+  secureTextEntry: PropTypes.bool,
 };
 
 export default Input;
