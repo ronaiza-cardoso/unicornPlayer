@@ -28,6 +28,19 @@ const track = {
 };
 
 function Home() {
+  useEffect(() => {
+    TrackPlayer.registerEventHandler((data) => {
+      console.log(data);
+      const { type } = data;
+      if (type === 'playback-track-changed' && Platform.OS === 'ios') {
+        // workaround to play the same song in loop on ios
+        // https://github.com/react-native-kit/react-native-track-player/issues/122
+        TrackPlayer.pause();
+        TrackPlayer.skip(track.id).then(() => TrackPlayer.play());
+      }
+    });
+  }, []);
+
   const [animatedValue] = useState(new Animated.Value(0));
 
   const playbackState = usePlaybackState();
@@ -63,6 +76,9 @@ function Home() {
         TrackPlayer.CAPABILITY_PLAY,
         TrackPlayer.CAPABILITY_PAUSE,
         TrackPlayer.CAPABILITY_STOP,
+
+        // workaround to play the same song in loop on ios
+        TrackPlayer.CAPABILITY_SKIP,
       ],
       compactCapabilities: [
         TrackPlayer.CAPABILITY_PLAY,
