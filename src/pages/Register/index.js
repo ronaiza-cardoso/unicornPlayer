@@ -18,6 +18,7 @@ import {
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { register } from '../../services/authentication';
+import { useAuth } from '../../navigation/AuthProvider';
 
 function Register({ navigation }) {
   const [userData, setUserData] = useState({
@@ -25,6 +26,8 @@ function Register({ navigation }) {
     email: '',
     password: '',
   });
+
+  const { setUser } = useAuth();
 
   function handleTextInput({ field, value }) {
     setUserData((prevState) => ({ ...prevState, [field]: value }));
@@ -49,6 +52,7 @@ function Register({ navigation }) {
 
   function handleRegisterPressed() {
     register({ email: userData.email, userInfo: userData });
+    setUser(userData);
   }
 
   function handleBackPressed() {
