@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,11 +6,12 @@ import {
   StyleSheet,
   Animated,
   Easing,
+  Platform,
 } from 'react-native';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 
 import { useAuth } from '../../navigation/AuthProvider';
-import { width, height } from '../../utils/dimensions';
+import { width } from '../../utils/dimensions';
 
 import Button from '../../components/Button';
 
@@ -46,14 +47,12 @@ function Home() {
   const playbackState = usePlaybackState();
   const { user, logOut } = useAuth();
 
-  const slidingUnicornsRef = useRef();
-
   useEffect(() => {
     setup();
   }, []);
 
   function slidingUnicorns() {
-    slidingUnicornsRef.current = Animated.loop(
+    Animated.loop(
       Animated.timing(animatedValue, {
         toValue: 1,
         duration: 4000,
@@ -105,7 +104,6 @@ function Home() {
   function handleStop() {
     TrackPlayer.stop().then(() => {
       setup();
-      console.log(slidingUnicornsRef);
       animatedValue.setValue(0);
     });
   }
@@ -136,13 +134,17 @@ function Home() {
         />
       </View>
 
-      <Animated.View
-        style={[
-          styles.unicornCarrouselContainer,
-          { transform: [{ translateX }] },
-        ]}>
-        <Text style={styles.unicornText}>🦄🦄🦄</Text>
-      </Animated.View>
+      {isPlaying ? (
+        <Animated.View
+          style={[
+            styles.unicornCarrouselContainer,
+            { transform: [{ translateX }] },
+          ]}>
+          <Text style={styles.unicornText}>🦄🦄🦄</Text>
+        </Animated.View>
+      ) : (
+        <View style={styles.unicornCarrouselContainer} />
+      )}
 
       <View style={styles.footer}>
         <Button title="Log out" onPress={logOut} />
@@ -160,7 +162,10 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   welcomeContainer: {
-    height: height * 0.3,
+    flex: 2,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   welcomeText: {
     marginTop: 20,
@@ -168,8 +173,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     color: 'rebeccapurple',
-    marginHorizontal: 10,
-    flex: 2,
   },
   playerContainer: {
     flexDirection: 'row',
