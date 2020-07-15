@@ -1,9 +1,16 @@
-import React, { useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  Easing,
+} from 'react-native';
 import TrackPlayer, { usePlaybackState } from 'react-native-track-player';
 
 import { useAuth } from '../../navigation/AuthProvider';
-import { width } from '../../utils/dimensions';
+import { width, height } from '../../utils/dimensions';
 
 import Button from '../../components/Button';
 
@@ -21,13 +28,32 @@ const track = {
 };
 
 function Home() {
-  const playbackState = usePlaybackState();
+  const [animatedValue] = useState(new Animated.Value(0));
 
+  const playbackState = usePlaybackState();
   const { user, logOut } = useAuth();
+
+  const slidingUnicornsRef = useRef();
 
   useEffect(() => {
     setup();
   }, []);
+
+  function slidingUnicorns() {
+    slidingUnicornsRef.current = Animated.loop(
+      Animated.timing(animatedValue, {
+        toValue: 1,
+        duration: 4000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+    ).start();
+  }
+
+  const translateX = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [width, -width],
+  });
 
   async function setup() {
     await TrackPlayer.setupPlayer({});
@@ -50,10 +76,10 @@ function Home() {
     if (currentTrack == null) {
       await TrackPlayer.reset();
       await TrackPlayer.add(track);
-      await TrackPlayer.play();
+      await TrackPlayer.play().then(slidingUnicorns);
     } else {
       if (playbackState === TrackPlayer.STATE_PAUSED) {
-        await TrackPlayer.play();
+        await TrackPlayer.play().then(slidingUnicorns);
       } else {
         await TrackPlayer.pause();
       }
@@ -63,6 +89,8 @@ function Home() {
   function handleStop() {
     TrackPlayer.stop().then(() => {
       setup();
+      console.log(slidingUnicornsRef);
+      animatedValue.setValue(0);
     });
   }
 
@@ -92,6 +120,14 @@ function Home() {
         />
       </View>
 
+      <Animated.View
+        style={[
+          styles.unicornCarrouselContainer,
+          { transform: [{ translateX }] },
+        ]}>
+        <Text style={styles.unicornText}>🦄🦄🦄</Text>
+      </Animated.View>
+
       <View style={styles.footer}>
         <Button title="Log out" onPress={logOut} />
       </View>
@@ -107,17 +143,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEFAFA',
     position: 'relative',
   },
-  welcomeContainer: {},
+  welcomeContainer: {
+    height: height * 0.3,
+  },
   welcomeText: {
     marginTop: 20,
-    fontSize: 18,
+    fontSize: 30,
+    textAlign: 'center',
     fontWeight: 'bold',
     color: 'rebeccapurple',
+    marginHorizontal: 10,
+    flex: 2,
   },
   playerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 2,
+    borderBottomWidth: 2,
+    borderBottomColor: 'rebeccapurple',
   },
   footer: {
     position: 'absolute',
@@ -135,6 +179,14 @@ const styles = StyleSheet.create({
   },
   stopButton: {
     fontSize: 26,
+  },
+  unicornCarrouselContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  unicornText: {
+    fontSize: 50,
   },
 });
 
