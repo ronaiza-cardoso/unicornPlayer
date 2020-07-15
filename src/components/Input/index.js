@@ -54,4 +54,8 @@ Input.propTypes = {
   secureTextEntry: PropTypes.bool,
 };
 
+Input.defaultProps = {
+  autoCapitalize: 'none',
+};
+
 export default Input;

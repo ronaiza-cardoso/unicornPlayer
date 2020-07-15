@@ -97,7 +97,6 @@ function Register({ navigation }) {
             textContentType="emailAddress"
             value={userData.email}
             isInputValid={!!userData.email && !isValidEmail(userData.email)}
-            autoCapitalize="none"
             autoCorrect
           />
           <Input
@@ -110,7 +109,6 @@ function Register({ navigation }) {
             isInputValid={
               !!userData.password && !isValidPassword(userData.password)
             }
-            autoCapitalize="none"
             autoCorrect
             secureTextEntry
           />
@@ -119,7 +117,6 @@ function Register({ navigation }) {
             onChangeText={(value) => handleTextInput({ field: 'name', value })}
             value={userData.name}
             isInputValid={!!userData.name && !isValidName(userData.name)}
-            autoCapitalize
             autoCorrect
           />
         </View>
@@ -138,7 +135,8 @@ function Register({ navigation }) {
           />
 
           <Text style={styles.createAccountLink} onPress={handleBackPressed}>
-            GO TO LOGIN
+            Already have an account?
+            <Text style={styles.strong}> Go to Login!</Text>
           </Text>
         </View>
       </SafeAreaView>
