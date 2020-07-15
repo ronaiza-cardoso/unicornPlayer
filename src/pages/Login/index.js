@@ -18,8 +18,8 @@ import { login } from '../../services/authentication';
 import { useAuth } from '../../navigation/AuthProvider';
 
 function Login({ navigation }) {
-  const [email, setEmail] = useState('rona@gmail.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [errorMsg, setErrorMsg] = useState();
   const [isEmailInvalid, setIsEmailInvalid] = useState();
   const [isPasswordInvalid, setIsPasswordInvalid] = useState();
@@ -42,9 +42,11 @@ function Login({ navigation }) {
       setIsEmailInvalid(false);
       setIsPasswordInvalid(false);
 
-      const userInfo = await login({ email, password });
-      if (userInfo.isUserValid) {
+      try {
+        const userInfo = await login({ email, password });
         setUser(userInfo);
+      } catch (error) {
+        setErrorMsg('User not valid, please verify your credentials');
       }
     }
   }
