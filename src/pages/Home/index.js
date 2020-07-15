@@ -108,6 +108,11 @@ function Home() {
     });
   }
 
+  function handleLogOut() {
+    logOut();
+    handleStop();
+  }
+
   const isPlaying = playbackState === TrackPlayer.STATE_PLAYING;
 
   return (
@@ -147,7 +152,7 @@ function Home() {
       )}
 
       <View style={styles.footer}>
-        <Button title="Log out" onPress={logOut} />
+        <Button title="Log out" onPress={handleLogOut} />
       </View>
     </SafeAreaView>
   );
