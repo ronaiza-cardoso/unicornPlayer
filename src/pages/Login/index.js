@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { width, height } from '../../utils/dimensions';
+import { isValidEmail, isValidPassword } from '../../utils/validators';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -25,10 +26,10 @@ function Login({ navigation }) {
   }
 
   function handleLoginPressed() {
-    if (!isValidEmail()) {
+    if (!isValidEmail(email)) {
       setErrorMsg('Invalid email');
       setIsEmailInvalid(true);
-    } else if (!isValidPassword()) {
+    } else if (!isValidPassword(password)) {
       setErrorMsg('Invalid password');
       setIsPasswordInvalid(true);
     } else {
@@ -37,16 +38,6 @@ function Login({ navigation }) {
       setIsEmailInvalid(false);
       setIsPasswordInvalid(false);
     }
-  }
-
-  function isValidEmail() {
-    const emailValidator = /(.+)@(.+){2,}\.(.+){2,}/;
-
-    return emailValidator.test(email);
-  }
-
-  function isValidPassword() {
-    return password.length >= 6;
   }
 
   return (
@@ -61,22 +52,20 @@ function Login({ navigation }) {
 
         <View style={styles.inputContainer}>
           <Input
-            style={[styles.input, isEmailInvalid && styles.error]}
-            placeholder="email"
+            placeholder="Email"
             onChangeText={setEmail}
             textContentType="emailAddress"
             value={email}
-            autoCapitalize
+            isInputValid={isEmailInvalid}
             autoCorrect
           />
           <Input
-            style={[styles.input, isPasswordInvalid && styles.error]}
-            placeholder="password"
+            placeholder="Password"
             textContentType="password"
             secureTextEntry={true}
             onChangeText={setPassword}
             value={password}
-            autoCapitalize
+            isInputValid={isPasswordInvalid}
             autoCorrect
           />
         </View>
