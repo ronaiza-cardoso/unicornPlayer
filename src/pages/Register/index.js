@@ -25,37 +25,25 @@ function Register({ navigation }) {
     password: '',
   });
 
-  const [errorMsg, setErrorMsg] = useState();
-
   function handleTextInput({ field, value }) {
     setUserData((prevState) => ({ ...prevState, [field]: value }));
-    errorMessage(field);
   }
 
-  function errorMessage(field) {
-    switch (field) {
-      case 'email':
-        if (!isValidEmail(userData[field])) {
-          setErrorMsg('Invalid email');
-        }
-
-        break;
-      case 'password':
-        if (!isValidPassword(userData[field])) {
-          setErrorMsg('Password must have at least 6 number or letters');
-        }
-
-        break;
-      case 'name':
-        if (!isValidName(userData[field])) {
-          setErrorMsg('Name must contains just letters');
-        }
-
-        break;
-
-      default:
-        break;
+  function getErrorMsg() {
+    let error = '';
+    if (userData.email && !isValidEmail(userData.email)) {
+      error = 'Invalid email';
     }
+
+    if (userData.password && !isValidPassword(userData.password)) {
+      error = 'Password must have at least 6 number or letters';
+    }
+
+    if (userData.name && !isValidName(userData.name)) {
+      error = 'Name must contains just letters';
+    }
+
+    return error;
   }
 
   function handleRegisterPressed() {}
@@ -122,9 +110,7 @@ function Register({ navigation }) {
         </View>
 
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>
-            {!isRegisterButtonInvalid() && errorMsg}
-          </Text>
+          <Text style={styles.errorText}>{getErrorMsg()}</Text>
         </View>
 
         <View style={styles.buttonContainer}>
