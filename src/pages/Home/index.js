@@ -31,7 +31,6 @@ const track = {
 function Home() {
   useEffect(() => {
     TrackPlayer.registerEventHandler((data) => {
-      console.log(data);
       const { type } = data;
       if (type === 'playback-track-changed' && Platform.OS === 'ios') {
         // workaround to play the same song in loop on ios

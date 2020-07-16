@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 
-import { width, height } from '../../utils/dimensions';
+import { height } from '../../utils/dimensions';
 import {
   isValidEmail,
   isValidPassword,
@@ -160,17 +160,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputContainer: {
-    width: width * 0.9,
+    marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   buttonContainer: {
-    width: width * 0.9,
+    marginHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 20,
   },
   errorContainer: {
-    width: width * 0.9,
+    marginHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 5,
