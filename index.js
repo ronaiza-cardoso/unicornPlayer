@@ -3,6 +3,9 @@ import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 
+// https://github.com/react-native-kit/react-native-track-player/issues/55
+TrackPlayer.setupPlayer({}).then(async () => {});
+
 import App from './src';
 import { name as appName } from './app.json';
 
